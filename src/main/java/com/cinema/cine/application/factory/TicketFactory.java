@@ -49,6 +49,7 @@ public class TicketFactory {
          System.out.println("User: " + ticket.getUser());
         System.out.println("User id: " + ticket.getUser().getId());
         return new TicketDto(
+            ticket.getId(),
             ticket.getSeatName(),
             ticket.getUser().getId(),
             ticket.getUser().getFullName(),
