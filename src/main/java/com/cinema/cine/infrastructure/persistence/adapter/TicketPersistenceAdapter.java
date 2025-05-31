@@ -32,9 +32,10 @@ public class TicketPersistenceAdapter implements TicketPersistencePort {
 
     @Override
     public List<Ticket> findAll() {
-        return ticketRepository.findAll()
-        .stream()
-        .map(this::toDomain).collect(Collectors.toList());
+        return ticketRepository.findAllWithUserAndMovie()
+                .stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -66,13 +67,22 @@ public class TicketPersistenceAdapter implements TicketPersistencePort {
         return entity;
     }
 
-
     private Ticket toDomain(TicketEntity entity) {
+        UserEntity userEntity = entity.getUser();
         User user = new User();
-        user.setId(entity.getUser().getId());
+        user.setId(userEntity.getId());
+        user.setUsername(userEntity.getUsername());
+        user.setEmail(userEntity.getEmail());
+        user.setFirstName(userEntity.getFirstName());
+        user.setLastName(userEntity.getLastName());
+        user.setPhoneNumber(userEntity.getPhoneNumber());
+        user.setRole(userEntity.getRole());
 
+        MovieEntity movieEntity = entity.getMovie();
         Movie movie = new Movie();
-        movie.setId(entity.getMovie().getId());
+        movie.setId(movieEntity.getId());
+        movie.setName(movieEntity.getName());
+        movie.setImagePath(movieEntity.getImagePath());
 
         return new Ticket(
                 entity.getId(),
@@ -81,5 +91,4 @@ public class TicketPersistenceAdapter implements TicketPersistencePort {
                 entity.getSeatName()
         );
     }
-
 }
